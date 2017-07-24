@@ -291,16 +291,16 @@ void ModelViewer::onFrameRender()
         {
             mpGraphicsState->setRasterizerState(mpWireframeRS);
             mpGraphicsState->setDepthStencilState(mpNoDepthDS);
-            mpProgramVars["PerFrameCB"]["gConstColor"] = true;
+//            mpProgramVars["PerFrameCB"]["gConstColor"] = true;
         }
         else
         {
             mpGraphicsState->setRasterizerState(mpCullRastState[mCullMode]);
             mpGraphicsState->setDepthStencilState(mpDepthTestDS);
-            mpProgramVars["PerFrameCB"]["gConstColor"] = false;
+//            mpProgramVars["PerFrameCB"]["gConstColor"] = false;
 
-            mpDirLight->setIntoConstantBuffer(mpProgramVars["PerFrameCB"].get(), "gDirLight");
-            mpPointLight->setIntoConstantBuffer(mpProgramVars["PerFrameCB"].get(), "gPointLight");
+//            mpDirLight->setIntoConstantBuffer(mpProgramVars["PerFrameCB"].get(), "gDirLight");
+//            mpPointLight->setIntoConstantBuffer(mpProgramVars["PerFrameCB"].get(), "gPointLight");
         }
 
         if(mUseTriLinearFiltering)
@@ -312,7 +312,7 @@ void ModelViewer::onFrameRender()
             mpModel->bindSamplerToMaterials(mpPointSampler);
         }
 
-        mpProgramVars["PerFrameCB"]["gAmbient"] = mAmbientIntensity;
+//        mpProgramVars["PerFrameCB"]["gAmbient"] = mAmbientIntensity;
         mpGraphicsState->setProgram(mpProgram);
         mpRenderContext->setGraphicsState(mpGraphicsState);
         mpRenderContext->setGraphicsVars(mpProgramVars);

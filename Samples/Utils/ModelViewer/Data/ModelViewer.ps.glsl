@@ -31,35 +31,12 @@ __import DefaultVS;
 
 in VS_OUT vOut;
 
-layout(set = 0, binding = 0) uniform PerFrameCB
-{
-    LightData gDirLight;
-    LightData gPointLight;
-    bool gConstColor;
-    vec3 gAmbient;
-};
-
 layout(location = 0) out vec4 fragColor;
 
 void main()
 {
-    if(gConstColor)
-    {
-        fragColor = vec4(0, 1, 0, 1);
-    }
-    else
-    {
-        ShadingAttribs shAttr;
-        prepareShadingAttribs(gMaterial, vOut.posW, gCam.position, vOut.normalW, vOut.bitangentW, vOut.texC, shAttr);
+    ShadingAttribs shAttr;
+    prepareShadingAttribs(gMaterial, vOut.posW, gCam.position, vOut.normalW, vOut.bitangentW, vOut.texC, shAttr);
 
-        ShadingOutput result;
-
-        // Directional light
-        evalMaterial(shAttr, gDirLight, result, true);
-
-        // Point light
-        evalMaterial(shAttr, gPointLight, result, false);
-
-        fragColor = vec4(result.finalValue + gAmbient * result.diffuseAlbedo, 1.f);
-    }
+    fragColor = vec4(0.0f, 0.0f, 1.0f, 1.f);
 }
