@@ -127,15 +127,6 @@ void _fn prepareShadingAttribs(in const MaterialData material, in float3 P, in f
 #endif
     _ref(ShadingAttribs) shAttr)
 {
-#if 0
-    /* Prepare shading attributes */
-    shAttr.P = P;
-    shAttr.E = normalize(camPos - P);
-    shAttr.N = normalize(normal);
-    shAttr.B = normalize(bitangent - shAttr.N * (dot(bitangent, shAttr.N)));
-    shAttr.T = normalize(cross(shAttr.B, shAttr.N));
-#endif
-
     shAttr.UV = uv;
 
 #ifdef _MS_USER_DERIVATIVES

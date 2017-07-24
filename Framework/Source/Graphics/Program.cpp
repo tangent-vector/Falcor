@@ -290,6 +290,9 @@ namespace Falcor
         // Start building a request for compilation
         SlangCompileRequest* slangRequest = spCreateCompileRequest(slangSession);
 
+		spSetLineDirectiveMode(slangRequest, SLANG_LINE_DIRECTIVE_MODE_NONE);
+		spSetDumpIntermediates(slangRequest, true);
+
         // Add our media search paths as `#include` search paths for Slang.
         //
         // TODO: Slang should probably support a callback API for all file I/O,
