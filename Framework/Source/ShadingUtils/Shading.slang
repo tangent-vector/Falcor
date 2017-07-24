@@ -154,20 +154,6 @@ void _fn prepareShadingAttribs(in const MaterialData material, in float3 P, in f
 
     /* Evaluate alpha test material modifier */
     applyAlphaTest(material, shAttr, P);
-    shAttr.aoFactor = 1;
-
-    /* Prefetch textures */
-    loop_unroll
-    for(uint iLayer = 0 ; iLayer < MatMaxLayers ; iLayer++)
-    {
-        if(shAttr.preparedMat.desc.layers[iLayer].type == MatNone) break;
-
-        shAttr.preparedMat.values.layers[iLayer].albedo = 
-            evalWithColor(desc.layers[iLayer].hasTexture, material.textures.layers[iLayer], material.samplerState, material.values.layers[iLayer].albedo, shAttr);
-    }
-
-    /* Perturb shading normal is needed */
-    perturbNormal(material, shAttr);
 }
 
 /**

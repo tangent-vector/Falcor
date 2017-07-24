@@ -456,22 +456,8 @@ float _fn calculateHashedAlpha(float3 hashInputCoord, float hashScale, bool useA
 *******************************************************************/    
 void _fn applyAlphaTest(in const MaterialData material, in const ShadingAttribs shAttr, float3 posW)
 {
-    float hashedAlphaScale = 1.0f;
-#ifdef _HASHED_ALPHA_SCALE
-    hashedAlphaScale = _HASHED_ALPHA_SCALE;
-#endif
-
     /* Evaluate alpha test material modifier */
-#ifdef _DEFAULT_ALPHA_TEST
     basicAlphaTest(material, shAttr);
-#elif defined(_HASHED_ALPHA_TEST_ANISOTROPIC)
-    float alphaThreshold = calculateHashedAlpha(posW, hashedAlphaScale, true);
-    applyHashedAlphaTest(material, shAttr, alphaThreshold);
-#else
-    // Default to isotropic hashed alpha test
-    float alphaThreshold = calculateHashedAlpha(posW, hashedAlphaScale, false);
-    applyHashedAlphaTest(material, shAttr, alphaThreshold);
-#endif
 }
 
 /*******************************************************************
