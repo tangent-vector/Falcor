@@ -118,23 +118,15 @@ This includes fetching all textures and computing final shading attributes, like
 After this step, one can save these shading attributes, e.g., in a G-Buffer to perform lighting afterwards.
 This routine also applies all material modifiers, like performs alpha test and applies a normal map.
 */
-void _fn prepareShadingAttribs(in const MaterialData material, in float3 P, in float3 camPos,
-    in float3 normal, in float3 bitangent, in float2 uv,
-#ifdef _MS_USER_DERIVATIVES
-    in const float2 dPdx, in const float2 dPdy,
-#else
-    in const float lodBias,
-#endif
+void _fn prepareShadingAttribs(
+	in MaterialData material,
+	in float2 uv,
+    in float lodBias,
     _ref(ShadingAttribs) shAttr)
 {
     shAttr.UV = uv;
 
-#ifdef _MS_USER_DERIVATIVES
-    shAttr.DPDX = dPdx;
-    shAttr.DPDY = dPdy;
-#else
     shAttr.lodBias = lodBias;
-#endif
 
     /* Copy the input material parameters */
 #ifdef _MS_STATIC_MATERIAL_DESC
@@ -149,45 +141,6 @@ void _fn prepareShadingAttribs(in const MaterialData material, in float3 P, in f
     /* Evaluate alpha test material modifier */
     applyAlphaTest(material, shAttr);
 }
-
-/**
-Another overload of PrepareShadingAttribs(), which does not require tangents.
-Instead it constructs a world-space axis-aligned tangent frame on the fly.
-*/
-void _fn prepareShadingAttribs(in const MaterialData material, in float3 P, in float3 camPos,
-    in float3 normal, in float2 uv,
-#ifdef _MS_USER_DERIVATIVES
-    in const float2 dPdx, in const float2 dPdy,
-#else
-    in const float lodBias,
-#endif
-    _ref(ShadingAttribs) shAttr)
-{
-    /* Generate an axis-aligned tangent frame */
-    float3 bitangent;
-    createTangentFrame(normal, bitangent);
-
-    prepareShadingAttribs(material, P, camPos, normal, bitangent, uv,
-#ifdef _MS_USER_DERIVATIVES
-        dPdx, dPdy,
-#else
-        lodBias,
-#endif
-        shAttr);
-}
-
-#ifndef _MS_USER_DERIVATIVES
-// Legacy version of prepareShadingAttribs() without LOD bias
-void _fn prepareShadingAttribs(in const MaterialData material, in float3 P, in float3 camPos, in float3 normal, in float2 uv, _ref(ShadingAttribs) shAttr)
-{
-    prepareShadingAttribs(material, P, camPos, normal, uv, 0, shAttr);
-}
-
-void _fn prepareShadingAttribs(in const MaterialData material, in float3 P, in float3 camPos, in float3 normal, in float3 bitangent, in float2 uv, _ref(ShadingAttribs) shAttr)
-{
-    prepareShadingAttribs(material, P, camPos, normal, bitangent, uv, 0, shAttr);
-}
-#endif
 
 float4 _fn evalEmissiveLayer(in const MaterialLayerValues layer, _ref(PassOutput) result)
 {
