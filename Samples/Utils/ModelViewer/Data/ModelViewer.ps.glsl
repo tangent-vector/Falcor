@@ -27,16 +27,16 @@
 ***************************************************************************/
 __import ShaderCommon;
 __import Shading;
-__import DefaultVS;
 
-in VS_OUT vOut;
+layout(location = 2)
+in vec2 vOut_texC;
 
 layout(location = 0) out vec4 fragColor;
 
 void main()
 {
     ShadingAttribs shAttr;
-    prepareShadingAttribs(gMaterial, vOut.texC, 0.0f, shAttr);
+    prepareShadingAttribs(gMaterial, vOut_texC, 0.0f, shAttr);
 
     fragColor = vec4(0.0f, 0.0f, 1.0f, 1.f);
 }
