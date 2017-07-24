@@ -121,9 +121,9 @@ This routine also applies all material modifiers, like performs alpha test and a
 void _fn prepareShadingAttribs(
 	in MaterialData material,
 	in float2 uv,
-    in float lodBias,
-    _ref(ShadingAttribs) shAttr)
+    in float lodBias )
 {
+    ShadingAttribs shAttr;
     shAttr.UV = uv;
 
     shAttr.lodBias = lodBias;
