@@ -454,7 +454,7 @@ float _fn calculateHashedAlpha(float3 hashInputCoord, float hashScale, bool useA
 /*******************************************************************
     alpha test
 *******************************************************************/    
-void _fn applyAlphaTest(in const MaterialData material, in const ShadingAttribs shAttr, float3 posW)
+void _fn applyAlphaTest(in const MaterialData material, in const ShadingAttribs shAttr)
 {
     /* Evaluate alpha test material modifier */
     basicAlphaTest(material, shAttr);
