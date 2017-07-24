@@ -26,7 +26,50 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ***************************************************************************/
 __import ShaderCommon;
-__import Shading;
+
+
+//__import Shading;
+
+bool alphaTestEnabled(in const MaterialData mat){
+return mat.desc.hasAlphaMap != uint(0);
+}
+
+vec4 sampleTexture(texture2D t, sampler s, const ShadingAttribs attr){
+return (texture(sampler2D(t,s), (attr.UV), (attr.lodBias)));
+}
+
+bool alphaTestPassed(in const MaterialData mat, in const ShadingAttribs attr){
+if(sampleTexture(mat.textures.alphaMap, mat.samplerState, attr).x < mat.values.alphaThreshold)
+{
+return false;
+}
+return true;
+}
+
+void basicAlphaTest(in const MaterialData mat, in const ShadingAttribs attr)
+{
+if(alphaTestEnabled(mat))
+{
+if(!alphaTestPassed(mat, attr))
+{
+discard;
+}
+}
+}
+
+void applyAlphaTest(in const MaterialData material, in const ShadingAttribs shAttr){
+basicAlphaTest(material, shAttr);
+}
+
+void prepareShadingAttribs(in MaterialData material, in vec2 uv, in float lodBias){
+ShadingAttribs shAttr;
+shAttr.UV = uv;
+shAttr.lodBias = lodBias;
+const MaterialDesc desc = { { { uint(1), uint(1), uint(2), uint(0), }, { uint(2), uint(1), uint(2), uint(0), }, { uint(0), uint(1), uint(2), uint(0), }, }, uint(1), uint(0), uint(0), uint(0), { { vec3(float(0), float(0), float(0)), -1, }, { vec3(float(0), float(0), float(0)), 0, }, { vec3(float(0), float(0), float(0)), 1, }, { vec3(float(0), float(0), float(0)), -1, }, { vec3(float(0), float(0), float(0)), -1, }, { vec3(float(0), float(0), float(0)), -1, }, }, };
+shAttr.preparedMat.values = material.values;
+shAttr.preparedMat.desc = desc;
+applyAlphaTest(material, shAttr);
+}
 
 layout(location = 2)
 in vec2 vOut_texC;
