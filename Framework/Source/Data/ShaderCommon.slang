@@ -81,10 +81,6 @@ float3x3 getBlendedInvTransposeWorldMat(float4 weights, uint4 ids)
 cbuffer InternalPerMaterialCB : register(b12)
 {
     MaterialData gMaterial;
-    MaterialData gTemporalMaterial;
-    float gTemporalLODThreshold;
-    bool gEnableTemporalNormalMaps;
-    bool gDebugTemporalMaterial;
 };
 
 float2 calcMotionVector(float2 pixelCrd, float4 prevPosH, float2 renderTargetDim)
